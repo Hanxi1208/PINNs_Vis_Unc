@@ -1,0 +1,345 @@
+conda activate /home/nvidia/anaconda3/envs/kplanes
+cd /data/pinns/notebooks
+
+## None
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type none \
+    --bias-level 0.0
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type none \
+    --bias-level 0.0
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.5 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type none \
+    --bias-level 0.0
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type none \
+    --bias-level 0.0
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 1 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type none \
+    --bias-level 0.0
+
+## only bias=1.0
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.5 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+## only bias=0.5
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.5 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+## only bias=0.3
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.5 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type none \
+    --noise-level 0.0 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+## only noise
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type none \
+    --bias-level 0.0
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type none \
+    --bias-level 0.0
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.5 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type none \
+    --bias-level 0.0
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type none \
+    --bias-level 0.0
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type none \
+    --bias-level 0.0
+
+## bais=0.5 and noise
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.5 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.5
+
+## bais=0.3 and noise
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.5 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.3
+
+
+## bais=0.8 and noise
+python Navier-Stokes-uncertainty.py \
+    --device cuda:0 \
+    --loss-weight 0.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:1 \
+    --loss-weight 0.2 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:2 \
+    --loss-weight 0.5 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:3 \
+    --loss-weight 0.8 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.8
+
+python Navier-Stokes-uncertainty.py \
+    --device cuda:7 \
+    --loss-weight 1.0 \
+    --noise-type gaussian \
+    --noise-level 0.05 \
+    --bias-type cosine \
+    --bias-level 0.8
