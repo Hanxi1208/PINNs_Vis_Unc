@@ -1,0 +1,16 @@
+# --- Large data release files: distributed via Google Drive, NOT committed ---
+# pinns_vis_unc_data/ keeps only its lightweight parts in git
+# (README.md, training_code/, load_example.ipynb). The field data below is the
+# ~1 GB release bundle and is shared as a zip on Google Drive instead.
+pinns_vis_unc_data/reference/
+pinns_vis_unc_data/observations/
+pinns_vis_unc_data/predictions/
+*.zip
+
+# --- Unfinished lid-driven cavity experiment: kept local-only ---
+Navier_Stokes_liddriven/
+
+# --- Python / Jupyter hygiene ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
