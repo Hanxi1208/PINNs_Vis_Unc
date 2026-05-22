@@ -14,7 +14,8 @@ $$
 
 **Problem setup.** We study a forward problem for the purpose of uncertainty visualization:
 
-1. **Observations.** The observations are constructed from the **reference solution** (the GT field from `cylinder_nektar_wake.mat`) by adding noise or sin/cos bias on top of it — i.e. `observation = reference + noise`. They are full field of `(u, v)` or `(u, v, p)`. The corruption is Gaussian noise or a deterministic bias (see §2.2); the `clean` scenario uses the reference directly.
+1. **Observations.** The observations are constructed from the **reference solution** (the GT field from `cylinder_nektar_wake.mat`) by adding noise or sin/cos bias on top of it — i.e. `observation = reference + noise`. They are full field of `(u, v)` or `(u, v, p)`. The corruption is Gaussian noise or a deterministic bias; the `clean` scenario uses the reference directly.
+   > An earlier version of this experiment randomly sampled `5,000` spacetime points each iteration and evaluated both the data loss and the PDE residual on that subset — a quick first pass to try out PINNs. This release instead uses the full grid for both, removing the subsampling.
 2. **Hypothesized PDE.** We assume the observations are governed by the Navier–Stokes equations above — a cylinder-wake flow at Reynolds number `Re = 100`. The PDE acts as a hypothesized physical prior on the data.
 3. **Goal.** Train a neural network to reconstruct the full field `(u, v, p)`, trading off fidelity to the observations against the hypothesized PDE. The loss weight `w` controls that trade-off.
 
@@ -94,107 +95,14 @@ Identical for every run.
 2. L-BFGS: started from the Adam result, `max_iter = 10,000`, history size `50`.
 
 ### Full-observation / full-collocation
-Both the data loss and the PDE residual are evaluated on all `1,000,000` spacetime points every iteration.
+Both the data loss and the PDE residual are evaluated on full field every iteration.
 
-> An earlier version of this experiment randomly sampled `5,000` spacetime points each iteration and evaluated both the data loss and the PDE residual on that subset — a quick first pass to try out PINNs. This release instead uses the full `1,000,000`-point grid for both, removing the subsampling as a source of variation.
 
 ### Code
 
-The training scripts are in **`training_code/`** — one per observation regime, plus a
-README with the exact commands used. They are reference copies, for seeing how the models
-were trained; this release ships their predictions, not the models themselves.
+The training scripts are in `training_code/`.
 
 ---
 
 
-### `reference/` contents
 
-The ground-truth fields and the grid, split into single-array `.npz` files (same
-field-file convention as `observations/` and `predictions/`):
-
-| File             | Key(s)               | Shape            | Description                  |
-|------------------|----------------------|------------------|------------------------------|
-| `reference/u.npz`| `u`                  | `(200, 50, 100)` | ground-truth `u` (n_time, ny, nx) |
-| `reference/v.npz`| `v`                  | `(200, 50, 100)` | ground-truth `v`             |
-| `reference/p.npz`| `p`                  | `(200, 50, 100)` | ground-truth `p`             |
-| `reference/grid.npz` | `x_grid`, `y_grid`, `t` | `(50,100)`, `(50,100)`, `(200,)` | grid coordinates + time values `0 … 19.9` |
-
-### Observation files — `observations/{regime}/{scenario}/`
-
-The (possibly corrupted) observations the models were actually trained on. One folder
-per `(regime, scenario)` — observations do **not** depend on the loss weight, so the 6
-loss-weight runs of a scenario all share the same observations. Inside each folder, the
-fields are separate single-array `.npz` files (same layout as the predictions):
-
-| File    | Key | Shape            | Present in       |
-|---------|-----|------------------|------------------|
-| `u.npz` | `u` | `(200, 50, 100)` | `uv` and `uvp`   |
-| `v.npz` | `v` | `(200, 50, 100)` | `uv` and `uvp`   |
-| `p.npz` | `p` | `(200, 50, 100)` | `uvp` only (`uv` does not observe `p`) |
-
-`observation = reference + corruption` (see §2.1). E.g.
-`np.load("observations/uvp/bias_cos0.3/u.npz")["u"]`.
-
-The `uvp` + sparse-`p` regime reuses the `uvp` observations — during training it simply
-restricts `p` to a uniform `5 × 10 = 50`-point subgrid per time step.
-
-### Prediction files — `u.npz` / `v.npz` / `p.npz`
-
-Inside each run folder, the three fields are separate single-array `.npz` files:
-
-| File    | Key  | Shape            | Description                                         |
-|---------|------|------------------|-----------------------------------------------------|
-| `u.npz` | `u`  | `(200, 50, 100)` | predicted `u`                                       |
-| `v.npz` | `v`  | `(200, 50, 100)` | predicted `v`                                       |
-| `p.npz` | `p`  | `(200, 50, 100)` | predicted `p`, **mean-aligned to `p_ref`** (pressure is only defined up to an additive constant) |
-
-So e.g. `np.load("predictions/uv/clean/lw0.50/u.npz")["u"]` gives the `(200,50,100)` `u` field.
-
-Each run folder also contains **`prediction_t10.png`** — a quick-look figure at `t = 10.0`
-showing, for each of `u, v, p`, the rows: ground truth / observation / prediction /
-absolute error. (It is only a preview; the `.npz` files hold the full data.)
-
----
-
-## 5. Loading example
-
-A runnable, already-executed version of everything below is in the notebook
-**`load_example.ipynb`** (open it from inside this folder).
-
-```python
-import numpy as np
-from pathlib import Path
-
-# --- ground truth ---
-u_ref = np.load("reference/u.npz")["u"]   # (200, 50, 100) = (n_time, ny, nx)
-v_ref = np.load("reference/v.npz")["v"]
-p_ref = np.load("reference/p.npz")["p"]
-grid = np.load("reference/grid.npz")
-x_grid, y_grid, t = grid["x_grid"], grid["y_grid"], grid["t"]
-
-# --- one run: u / v / p are separate files inside the run folder ---
-run = "predictions/uvp/bias_cos0.3/lw0.20"
-u_pred = np.load(f"{run}/u.npz")["u"]   # (200, 50, 100)
-v_pred = np.load(f"{run}/v.npz")["v"]
-p_pred = np.load(f"{run}/p.npz")["p"]
-
-# error field at t = 10.0  (snapshot index 100)
-abs_err = np.abs(u_pred[100] - u_ref[100])   # (50, 100)
-
-# --- iterate every run (the folder tree IS the index) ---
-for run_dir in sorted(Path("predictions").glob("*/*/lw*")):
-    regime, scenario, lw = run_dir.parts[-3:]   # e.g. "uvp", "bias_cos0.3", "lw0.20"
-    u = np.load(run_dir / "u.npz")["u"]
-    # ... compute whatever metric you need against reference/
-```
-
-For an uncertainty view, stack all 6 loss weights of one (regime, scenario) and look at
-the spread, e.g.:
-
-```python
-import numpy as np
-from pathlib import Path
-run_dirs = sorted(Path("predictions/uvp/bias_cos0.3").glob("lw*"))
-u_stack = np.stack([np.load(d / "u.npz")["u"] for d in run_dirs])  # (6, 200, 50, 100)
-u_spread = u_stack.std(axis=0)                                     # disagreement across w
-```
