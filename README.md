@@ -9,6 +9,16 @@ This project focuses on different Navier-Stokes Equations.
 
 ---
 
+## Data release — `pinns_vis_unc_data/`
+
+The full dataset for the unsteady Navier-Stokes uncertainty experiments: the reference solution, the (corrupted) observations, predictions from all 93 trained models over the full time domain, and the training scripts.
+
+**Download (~1.1 GB zip):** https://drive.google.com/file/d/1zJyVYh0e65n8yhxoUBKqtnldQtCbuiIa/view?usp=drive_link
+
+See [`pinns_vis_unc_data/README.md`](./pinns_vis_unc_data/README.md) for the experiment design, data layout, and a loading example.
+
+---
+
 ## Unsteady Navier-Stokes (`/Navier_Stokes_unsteady`)
 
 #### Governing PDE
